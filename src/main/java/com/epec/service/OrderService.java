@@ -1,17 +1,22 @@
 package com.epec.service;
 
-import java.util.List;
-
-import com.epec.mapper.AddressMapper;
-import com.epec.mapper.OrderItemMapper;
-import com.epec.model.AddOrderAO;
-import com.epec.model.Address;
-import com.epec.model.OrderItem;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.epec.mapper.OrderMapper;
 import com.epec.model.Order;
+import com.epec.model.ao.AddOrderAO;
+import com.epec.model.vo.AddressVO;
+import com.epec.model.vo.OrderItemVO;
+import com.epec.model.vo.OrderVO;
+import com.google.common.collect.Lists;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -20,10 +25,10 @@ public class OrderService {
 	private OrderMapper orderMapper;
 
 	@Autowired
-	private OrderItemMapper orderItemMapper;
+	private OrderItemService orderItemService;
 
 	@Autowired
-	private AddressMapper addressMapper;
+	private AddressService addressService;
 	
 	public List<Order> getOrderListByBuyerId(Long buyerId) {
 		return orderMapper.getOrderListByBuyerId(buyerId);
@@ -39,17 +44,52 @@ public class OrderService {
 		order.setBuyerId(addOrderAO.getBuyerId());
 		orderMapper.insert(order);
 
-		Address address = new Address();
-		address.setOrderId(order.getOrderId());
-		address.setAddress(addOrderAO.getAddress());
-		addressMapper.insert(address);
+		// 保存地址信息
+		addressService.saveAddress(addOrderAO, order.getOrderId());
 
-		addOrderAO.getSkuCodeList().forEach(skuCode -> {
-			OrderItem orderItem = new OrderItem();
-			orderItem.setOrderId(order.getOrderId());
-			orderItem.setSkuCode(skuCode);
-			orderItem.setBuyerId(addOrderAO.getBuyerId());
-			orderItemMapper.insert(orderItem);
+		// 保存订单明细信息
+		orderItemService.saveOrderItem(addOrderAO, order.getOrderId());
+	}
+
+	public List<OrderVO> getAllOrderList(Long buyerId){
+		List<OrderVO> orderVOList = this.getOrderVOList(buyerId);
+		if (CollectionUtils.isEmpty(orderVOList)) {
+			return Lists.newArrayList();
+		}
+
+		List<Long> orderIdList = orderVOList.stream().map(OrderVO::getOrderId).collect(Collectors.toList());
+
+		Map<Long, List<OrderItemVO>> orderItemVOMap = orderItemService.getOrderItemVOMap(orderIdList);
+
+		Map<Long, AddressVO> addressVOMap = addressService.getAddressMap(orderIdList);
+
+		orderVOList.stream().forEach(order -> {
+			List<OrderItemVO> orderItemVOList = orderItemVOMap.get(order.getOrderId());
+			order.setOrderItemVOList(orderItemVOList);
+
+			AddressVO addressVO = addressVOMap.get(order.getOrderId());
+			order.setAddressVO(addressVO);
 		});
+
+		return orderVOList;
+	}
+
+	private List<OrderVO> getOrderVOList(Long buyerId){
+		QueryWrapper<Order> queryWrapper = Wrappers.query();
+		queryWrapper.eq("buyer_id", buyerId);
+		List<Order> orderList = orderMapper.selectList(queryWrapper);
+		if (CollectionUtils.isEmpty(orderList)) {
+			return Lists.newArrayList();
+		}
+		return orderList.stream().map(order -> covertOrderVO(order)).collect(Collectors.toList());
+	}
+
+	private OrderVO covertOrderVO(Order order) {
+		if (order == null) {
+			return null;
+		}
+		OrderVO orderVO = new OrderVO();
+		BeanUtils.copyProperties(order, orderVO);
+		return orderVO;
 	}
 }

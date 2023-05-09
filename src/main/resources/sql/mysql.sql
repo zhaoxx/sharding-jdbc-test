@@ -43,3 +43,10 @@ CREATE TABLE IF NOT EXISTS `t_address` (
     `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`address_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='订单地址表';
+
+
+truncate table t_order_0;
+truncate table t_order_1;
+truncate table t_order_item_0;
+truncate table t_order_item_1;
+truncate table t_address;

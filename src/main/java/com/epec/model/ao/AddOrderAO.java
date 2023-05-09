@@ -1,4 +1,4 @@
-package com.epec.model;
+package com.epec.model.ao;
 
 import lombok.Data;
 

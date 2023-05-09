@@ -1,5 +1,6 @@
 package com.epec.model;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -11,6 +12,8 @@ import lombok.Data;
 @Data
 @TableName(value ="t_address")
 public class Address {
+
+    @TableId(value = "address_id")
     private Long addressId;
 
     private Long orderId;
