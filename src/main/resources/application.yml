@@ -1,19 +1,19 @@
 spring:
   shardingsphere:
     datasource:
-      ds_0:
+      ds-0:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.jdbc.Driver
-        jdbc-url: jdbc:mysql://localhost:3306/sharding_master?&serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+        jdbc-url: jdbc:mysql://localhost:3306/sharding_master?serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
         username: root
         password: 123456
-      ds_1:
+      ds-1:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.jdbc.Driver
-        jdbc-url: jdbc:mysql://localhost:3306/sharding_salve?&serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+        jdbc-url: jdbc:mysql://localhost:3306/sharding_salve?serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
         username: root
         password: 123456
-      names: ds_0,ds_1
+      names: ds-0,ds-1
     rules:
       sharding:
         binding-tables:
@@ -29,7 +29,7 @@ spring:
         sharding-algorithms:
           database-inline:
             props:
-              algorithm-expression: ds_$->{buyer_id % 2}
+              algorithm-expression: ds-$->{buyer_id % 2}
             type: INLINE
           t-order-inline:
             type: INLINE
@@ -41,7 +41,7 @@ spring:
               algorithm-expression: t_order_item_$->{order_item_id % 2}
         tables:
           t_order:
-            actual-data-nodes: ds_$->{0..1}.t_order_$->{0..1}
+            actual-data-nodes: ds-$->{0..1}.t_order_$->{0..1}
             table-strategy:
               standard:
                 sharding-column: order_id
@@ -50,7 +50,7 @@ spring:
               column: order_id
               key-generator-name: snowflake
           t_order_item:
-            actual-data-nodes: ds_$->{0..1}.t_order_item_$->{0..1}
+            actual-data-nodes: ds-$->{0..1}.t_order_item_$->{0..1}
             table-strategy:
               standard:
                 sharding-column: order_item_id

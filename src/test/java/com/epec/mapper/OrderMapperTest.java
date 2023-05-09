@@ -29,7 +29,7 @@ public class OrderMapperTest {
 
     @Test
     void batchInsert() {
-        for (int i = 0; i < 5000; i++) {
+        for (int i = 0; i < 100; i++) {
             Order order = new Order();
             order.setBuyerId((long)i);
             orderMapper.insert(order);

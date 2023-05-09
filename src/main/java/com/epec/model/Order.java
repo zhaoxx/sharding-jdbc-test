@@ -1,5 +1,6 @@
 package com.epec.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -7,7 +8,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 
 @Data
-//@TableName(value ="t_order")
+@TableName(value ="t_order")
 public class Order implements Serializable {
 
 	private Long orderId;
