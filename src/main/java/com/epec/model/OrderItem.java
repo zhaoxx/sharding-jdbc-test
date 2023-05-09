@@ -1,5 +1,9 @@
 package com.epec.model;
 
+
+import lombok.Data;
+
+@Data
 public class OrderItem {
 	
 	private Long id;

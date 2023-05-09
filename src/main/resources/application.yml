@@ -1,33 +1,67 @@
-server:
-  port: 8080
-sharding:
-  jdbc: 
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/sharding_master?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=CTT
-    username: root
-    password: 123456
-    filters: stat
-    maxActive: 100
-    initialSize: 1
-    maxWait: 15000
-    minIdle: 1
-    timeBetweenEvictionRunsMillis: 30000
-    minEvictableIdleTimeMillis: 180000
-    validationQuery: SELECT 'x'
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: false
-    maxPoolPreparedStatementPerConnectionSize: 20
-    removeAbandoned: true
-    removeAbandonedTimeout: 600
-    logAbandoned: false
-    connectionInitSqls: 
-    
-    url0: jdbc:mysql://127.0.0.1:3306/sharding_master?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=CTT
-    username0: root
-    password0: 123456
-    
-    url1: jdbc:mysql://127.0.0.1:3306/sharding_salve?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=CTT
-    username1: root
-    password1: 123456
+spring:
+  shardingsphere:
+    datasource:
+      ds_0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/sharding_master?&serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+        username: root
+        password: 123456
+      ds_1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/sharding_salve?&serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+        username: root
+        password: 123456
+      names: ds_0,ds_1
+    rules:
+      sharding:
+        binding-tables:
+          - t_order,t_order_item
+        broadcast-tables: t_address
+        default-database-strategy:
+          standard:
+            sharding-algorithm-name: database-inline
+            sharding-column: buyer_id
+        key-generators:
+          snowflake:
+            type: SNOWFLAKE
+        sharding-algorithms:
+          database-inline:
+            props:
+              algorithm-expression: ds_$->{buyer_id % 2}
+            type: INLINE
+          t-order-inline:
+            type: INLINE
+            props:
+              algorithm-expression: t_order_$->{order_id % 2}
+          t-order-item-inline:
+            type: INLINE
+            props:
+              algorithm-expression: t_order_item_$->{order_item_id % 2}
+        tables:
+          t_order:
+            actual-data-nodes: ds_$->{0..1}.t_order_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: order_id
+                sharding-algorithm-name: t-order-inline
+            key-generate-strategy:
+              column: order_id
+              key-generator-name: snowflake
+          t_order_item:
+            actual-data-nodes: ds_$->{0..1}.t_order_item_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: order_item_id
+                sharding-algorithm-name: t-order-item-inline
+            key-generate-strategy:
+              column: order_item_id
+              key-generator-name: snowflake
+
+
+# mybatis 配置内容
+mybatis:
+  config-location: classpath:mybatis-config.xml # 配置 MyBatis 配置文件路径
+  mapper-locations: classpath:mapper/*.xml # 配置 Mapper XML 地址
+  type-aliases-package: com.epec.model # 配置数据库实体包路径

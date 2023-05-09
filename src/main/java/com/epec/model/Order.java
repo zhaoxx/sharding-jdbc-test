@@ -1,8 +1,13 @@
 package com.epec.model;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
+
+@Data
+//@TableName(value ="t_order")
 public class Order implements Serializable {
 
 	private Long orderId;

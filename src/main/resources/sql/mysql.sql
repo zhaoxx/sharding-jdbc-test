@@ -1,7 +1,7 @@
 
 CREATE TABLE IF NOT EXISTS `t_order_0` (
 	`order_id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `buyer_id`  bigint NOT NULL DEFAULT '0' COMMENT '购买用户id',
+    `buyer_id`  bigint NOT NULL DEFAULT '0' COMMENT '购买用户id',
 	`create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`order_id`)
