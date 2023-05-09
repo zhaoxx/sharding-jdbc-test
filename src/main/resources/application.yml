@@ -3,7 +3,7 @@ server:
 sharding:
   jdbc: 
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/sharding_master?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=CTT
+    url: jdbc:mysql://127.0.0.1:3306/sharding_test_01?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=CTT
     username: root
     password: 123456
     filters: stat
@@ -24,10 +24,10 @@ sharding:
     logAbandoned: false
     connectionInitSqls: 
     
-    url0: jdbc:mysql://127.0.0.1:3306/sharding_master?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=CTT
+    url0: jdbc:mysql://127.0.0.1:3306/sharding_test_01?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=CTT
     username0: root
     password0: 123456
     
-    url1: jdbc:mysql://127.0.0.1:3306/sharding_salve?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=CTT
+    url1: jdbc:mysql://127.0.0.1:3306/sharding_test_02?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=CTT
     username1: root
     password1: 123456
