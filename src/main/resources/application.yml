@@ -13,6 +13,18 @@ spring:
         jdbc-url: jdbc:mysql://localhost:3306/sharding_test_02?serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
         username: root
         password: 123456
+#      ds-slave-0:
+#        type: com.zaxxer.hikari.HikariDataSource
+#        driver-class-name: com.mysql.jdbc.Driver
+#        jdbc-url: jdbc:mysql://localhost:3306/sharding_test_01_slave?serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+#        username: root
+#        password: 123456
+#      ds-slave-1:
+#        type: com.zaxxer.hikari.HikariDataSource
+#        driver-class-name: com.mysql.jdbc.Driver
+#        jdbc-url: jdbc:mysql://localhost:3306/sharding_test_02_slave?serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+#        username: root
+#        password: 123456
       names: ds-0,ds-1
 #      readwrite_ds:
 #        writeDataSourceName: write_ds
@@ -26,9 +38,9 @@ spring:
 #        type: RANDOM
     rules:
       sharding:
-        binding-tables:
+        binding-tables: # 绑定表
           - t_order,t_order_item
-        broadcast-tables: t_address
+        broadcast-tables: t_address #广播规则表
         default-database-strategy:
           standard:
             sharding-algorithm-name: database-inline
