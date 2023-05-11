@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
 	
-	@Autowired
+	@Resource
 	private OrderMapper orderMapper;
 
 	@Autowired
@@ -51,15 +52,15 @@ public class OrderService {
 		orderItemService.saveOrderItem(addOrderAO, order.getOrderId());
 	}
 
-	public List<OrderVO> getAllOrderList(Long buyerId){
-		List<OrderVO> orderVOList = this.getOrderVOList(buyerId);
+	public List<OrderVO> getAllOrderList(Long buyerId, Long orderId){
+		List<OrderVO> orderVOList = this.getOrderVOList(buyerId, orderId);
 		if (CollectionUtils.isEmpty(orderVOList)) {
 			return Lists.newArrayList();
 		}
 
 		List<Long> orderIdList = orderVOList.stream().map(OrderVO::getOrderId).collect(Collectors.toList());
 
-		Map<Long, List<OrderItemVO>> orderItemVOMap = orderItemService.getOrderItemVOMap(orderIdList);
+		Map<Long, List<OrderItemVO>> orderItemVOMap = orderItemService.getOrderItemVOMap(buyerId, orderIdList);
 
 		Map<Long, AddressVO> addressVOMap = addressService.getAddressMap(orderIdList);
 
@@ -74,9 +75,14 @@ public class OrderService {
 		return orderVOList;
 	}
 
-	private List<OrderVO> getOrderVOList(Long buyerId){
+	private List<OrderVO> getOrderVOList(Long buyerId, Long orderId){
 		QueryWrapper<Order> queryWrapper = Wrappers.query();
-		queryWrapper.eq("buyer_id", buyerId);
+		if (buyerId != null) {
+			queryWrapper.eq("buyer_id", buyerId);
+		}
+		if (orderId != null) {
+			queryWrapper.eq("order_id", orderId);
+		}
 		List<Order> orderList = orderMapper.selectList(queryWrapper);
 		if (CollectionUtils.isEmpty(orderList)) {
 			return Lists.newArrayList();

@@ -26,23 +26,23 @@ public class OrderServiceTest {
 
     @Test
     public void saveOrder(){
-        for(int i=0;i<20;i++) {
-            Random random = new Random();
-            long radomBuyerId = random.nextInt(20);
-
-            AddOrderAO addOrderAO = new AddOrderAO();
-            addOrderAO.setBuyerId(radomBuyerId);
-            addOrderAO.setAddress("收货地址:"+i);
-            List<String> skuCodeList = Lists.newArrayList("sku1", "sku2");
-            addOrderAO.setSkuCodeList(skuCodeList);
-            orderService.saveOrder(addOrderAO);
-        }
+//        for(int i=0;i<20;i++) {
+//            Random random = new Random();
+//            long radomBuyerId = random.nextInt(20);
+//
+//            AddOrderAO addOrderAO = new AddOrderAO();
+//            addOrderAO.setBuyerId(radomBuyerId);
+//            addOrderAO.setAddress("收货地址:"+i);
+//            List<String> skuCodeList = Lists.newArrayList("sku1", "sku2");
+//            addOrderAO.setSkuCodeList(skuCodeList);
+//            orderService.saveOrder(addOrderAO);
+//        }
     }
 
     @Test
     public void getOrder(){
         Long buyerId = (long)15;
-        List<OrderVO> orderVOList = orderService.getAllOrderList(buyerId);
+        List<OrderVO> orderVOList = orderService.getAllOrderList(buyerId, null);
         System.out.println(JSON.toJSONString(orderVOList));
     }
 

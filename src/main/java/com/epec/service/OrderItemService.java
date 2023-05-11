@@ -37,9 +37,12 @@ public class OrderItemService {
         });
     }
 
-    public Map<Long, List<OrderItemVO>> getOrderItemVOMap(List<Long> orderIdList) {
+    public Map<Long, List<OrderItemVO>> getOrderItemVOMap(Long buyerId, List<Long> orderIdList) {
         QueryWrapper<OrderItem> queryWrapper = Wrappers.query();
         queryWrapper.in("order_id", orderIdList);
+        if (buyerId != null) {
+            queryWrapper.eq("buyer_id", buyerId);
+        }
         List<OrderItem> orderItemList = orderItemMapper.selectList(queryWrapper);
         if (CollectionUtils.isEmpty(orderItemList)) {
             return Maps.newHashMap();

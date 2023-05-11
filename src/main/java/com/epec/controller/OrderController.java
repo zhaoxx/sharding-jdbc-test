@@ -1,15 +1,16 @@
 package com.epec.controller;
 
-import java.util.List;
-
+import com.alibaba.fastjson2.JSON;
+import com.epec.model.ao.AddOrderAO;
+import com.epec.service.OrderService;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.epec.model.Order;
-import com.epec.service.OrderService;
+import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -18,27 +19,20 @@ public class OrderController {
 	@Autowired
 	private OrderService orderService;
 	
-	@RequestMapping(path="/{buyerId}", method={RequestMethod.GET})
-	public List<Order> getOrderListByBuyerId(@PathVariable("buyerId") Long buyerId) {
-		return orderService.getOrderListByBuyerId(buyerId);
-	}
-	
-	@RequestMapping(path="/{buyerId}/{orderId}", method={RequestMethod.GET})
-	public String createOrderRest(@PathVariable("buyerId") Long buyerId, @PathVariable("orderId") Long orderId) {
-		Order order = new Order();
-		order.setBuyerId(buyerId);
-		order.setOrderId(orderId);
-		orderService.createOrder(order);
-		return "success";
-	}
-	
-	@RequestMapping(path="/createOrder", method={RequestMethod.GET})
-	public String createOrder(Long buyerId, Long orderId) {
-		Order order = new Order();
-		order.setBuyerId(buyerId);
-		order.setOrderId(orderId);
-		orderService.createOrder(order);
-		return "success";
+	@GetMapping("getOrder")
+	public String getOrder(@RequestParam(value = "buyerId", required = false) Long buyerId,
+						   @RequestParam(value = "orderId", required = false) Long orderId) {
+		return JSON.toJSONString(orderService.getAllOrderList(buyerId, orderId));
 	}
 
+	@GetMapping("createOrder")
+	public String createOrderRest(@RequestParam(value = "buyerId") Long buyerId) {
+		AddOrderAO addOrderAO = new AddOrderAO();
+		addOrderAO.setBuyerId(buyerId);
+		addOrderAO.setAddress("收货地址:"+System.currentTimeMillis());
+		List<String> skuCodeList = Lists.newArrayList("sku1", "sku2");
+		addOrderAO.setSkuCodeList(skuCodeList);
+		orderService.saveOrder(addOrderAO);
+		return "success";
+	}
 }
