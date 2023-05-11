@@ -1,3 +1,4 @@
+分库分表
 1、t_order 和 t_order_item 为绑定表，相同订单id数据落到同一个数据库节点，表序列号相同。
 2、t_address为广播表，每个数据节点存储全量数据。
 3、http://localhost:8080/druid/index.html 
@@ -39,3 +40,8 @@ WHERE order_id IN (1656542944004079617)
 http://localhost:8080/order/getOrder?buyerId=3&orderId=1656542944004079617
 指定数据库节点，指定表查询
 
+
+
+读写分离
+1、插入数据
+INSERT INTO `t_order_1` (`order_id`, `buyer_id`, `create_time`, `update_time`) VALUES (1656542774898130945, 1, '2023-05-11 14:12:29', '2023-05-11 14:12:29');

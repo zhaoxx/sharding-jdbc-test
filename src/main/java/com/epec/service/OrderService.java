@@ -2,6 +2,7 @@ package com.epec.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.epec.config.ShardingJdbcMaster;
 import com.epec.mapper.OrderMapper;
 import com.epec.model.Order;
 import com.epec.model.ao.AddOrderAO;
@@ -30,14 +31,6 @@ public class OrderService {
 
 	@Autowired
 	private AddressService addressService;
-	
-	public List<Order> getOrderListByBuyerId(Long buyerId) {
-		return orderMapper.getOrderListByBuyerId(buyerId);
-	}
-	
-	public void createOrder(Order order) {
-		orderMapper.createOrder(order);
-	}
 
 	public void saveOrder(AddOrderAO addOrderAO) {
 		// 保存主表
@@ -53,6 +46,30 @@ public class OrderService {
 	}
 
 	public List<OrderVO> getAllOrderList(Long buyerId, Long orderId){
+		List<OrderVO> orderVOList = this.getOrderVOList(buyerId, orderId);
+		if (CollectionUtils.isEmpty(orderVOList)) {
+			return Lists.newArrayList();
+		}
+
+		List<Long> orderIdList = orderVOList.stream().map(OrderVO::getOrderId).collect(Collectors.toList());
+
+		Map<Long, List<OrderItemVO>> orderItemVOMap = orderItemService.getOrderItemVOMap(buyerId, orderIdList);
+
+		Map<Long, AddressVO> addressVOMap = addressService.getAddressMap(orderIdList);
+
+		orderVOList.stream().forEach(order -> {
+			List<OrderItemVO> orderItemVOList = orderItemVOMap.get(order.getOrderId());
+			order.setOrderItemVOList(orderItemVOList);
+
+			AddressVO addressVO = addressVOMap.get(order.getOrderId());
+			order.setAddressVO(addressVO);
+		});
+
+		return orderVOList;
+	}
+
+	@ShardingJdbcMaster
+	public List<OrderVO> getAllOrderListByMaster(Long buyerId, Long orderId){
 		List<OrderVO> orderVOList = this.getOrderVOList(buyerId, orderId);
 		if (CollectionUtils.isEmpty(orderVOList)) {
 			return Lists.newArrayList();
