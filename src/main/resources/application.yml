@@ -16,7 +16,7 @@ spring:
       master-ds-0:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/sharding_test_01?serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+        url: jdbc:mysql://localhost:3306/sharding_test_01?serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
         username: root
         password: 123456
         initial-size: 6
@@ -45,7 +45,7 @@ spring:
       master-ds-1:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/sharding_test_02?serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+        url: jdbc:mysql://localhost:3306/sharding_test_02?serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
         username: root
         password: 123456
         initial-size: 6
@@ -74,7 +74,7 @@ spring:
       slave-ds-0:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/sharding_test_01_slave?serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+        url: jdbc:mysql://localhost:3306/sharding_test_01_slave?serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
         username: root
         password: 123456
         initial-size: 6
@@ -103,7 +103,7 @@ spring:
       slave-ds-1:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/sharding_test_02_slave?serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+        url: jdbc:mysql://localhost:3306/sharding_test_02_slave?serverTimezone=CTT&useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
         username: root
         password: 123456
         initial-size: 6
@@ -150,7 +150,7 @@ spring:
               # 从库
               read-data-source-names: slave-ds-1
               # 负载均衡算法名称
-              load-balancer-name: round
+              load-balancer-name: round-robin
         load-balancers:
           round-robin: # 负载均衡算法
             type: ROUND_ROBIN # 轮询

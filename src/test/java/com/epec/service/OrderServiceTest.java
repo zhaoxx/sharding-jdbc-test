@@ -1,6 +1,7 @@
 package com.epec.service;
 
 import com.alibaba.fastjson2.JSON;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.epec.model.ao.AddOrderAO;
 import com.epec.model.vo.OrderVO;
 import com.google.common.collect.Lists;
@@ -42,7 +43,7 @@ public class OrderServiceTest {
     @Test
     public void getOrder(){
         Long buyerId = (long)15;
-        List<OrderVO> orderVOList = orderService.getAllOrderList(buyerId, null);
+        IPage<OrderVO> orderVOList = orderService.getOrderList(buyerId, null);
         System.out.println(JSON.toJSONString(orderVOList));
     }
 

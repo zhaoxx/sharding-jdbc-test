@@ -22,13 +22,13 @@ public class OrderController {
 	@GetMapping("getOrder")
 	public String getOrder(@RequestParam(value = "buyerId", required = false) Long buyerId,
 						   @RequestParam(value = "orderId", required = false) Long orderId) {
-		return JSON.toJSONString(orderService.getAllOrderList(buyerId, orderId));
+		return JSON.toJSONString(orderService.getOrderList(buyerId, orderId));
 	}
 
 	@GetMapping("getMasterOrder")
 	public String getMasterOrder(@RequestParam(value = "buyerId", required = false) Long buyerId,
 						   @RequestParam(value = "orderId", required = false) Long orderId) {
-		return JSON.toJSONString(orderService.getAllOrderListByMaster(buyerId, orderId));
+		return JSON.toJSONString(orderService.getOrderListByMaster(buyerId, orderId));
 	}
 
 	@GetMapping("createOrder")

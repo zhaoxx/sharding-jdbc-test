@@ -1,7 +1,9 @@
 package com.epec.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.epec.config.ShardingJdbcMaster;
 import com.epec.mapper.OrderMapper;
 import com.epec.model.Order;
@@ -45,19 +47,19 @@ public class OrderService {
 		orderItemService.saveOrderItem(addOrderAO, order.getOrderId());
 	}
 
-	public List<OrderVO> getAllOrderList(Long buyerId, Long orderId){
-		List<OrderVO> orderVOList = this.getOrderVOList(buyerId, orderId);
-		if (CollectionUtils.isEmpty(orderVOList)) {
-			return Lists.newArrayList();
+	public IPage<OrderVO> getOrderList(Long buyerId, Long orderId){
+		IPage<OrderVO> orderPage = this.getPageOrderVOList(buyerId, orderId);
+		if (orderPage == null || CollectionUtils.isEmpty(orderPage.getRecords())) {
+			return orderPage;
 		}
 
-		List<Long> orderIdList = orderVOList.stream().map(OrderVO::getOrderId).collect(Collectors.toList());
+		List<Long> orderIdList = orderPage.getRecords().stream().map(OrderVO::getOrderId).collect(Collectors.toList());
 
 		Map<Long, List<OrderItemVO>> orderItemVOMap = orderItemService.getOrderItemVOMap(buyerId, orderIdList);
 
 		Map<Long, AddressVO> addressVOMap = addressService.getAddressMap(orderIdList);
 
-		orderVOList.stream().forEach(order -> {
+		orderPage.getRecords().stream().forEach(order -> {
 			List<OrderItemVO> orderItemVOList = orderItemVOMap.get(order.getOrderId());
 			order.setOrderItemVOList(orderItemVOList);
 
@@ -65,34 +67,23 @@ public class OrderService {
 			order.setAddressVO(addressVO);
 		});
 
-		return orderVOList;
+		return orderPage;
 	}
 
+	/**
+	 * 强制主库查询
+	 * @param buyerId
+	 * @param orderId
+	 * @return
+	 */
 	@ShardingJdbcMaster
-	public List<OrderVO> getAllOrderListByMaster(Long buyerId, Long orderId){
-		List<OrderVO> orderVOList = this.getOrderVOList(buyerId, orderId);
-		if (CollectionUtils.isEmpty(orderVOList)) {
-			return Lists.newArrayList();
-		}
-
-		List<Long> orderIdList = orderVOList.stream().map(OrderVO::getOrderId).collect(Collectors.toList());
-
-		Map<Long, List<OrderItemVO>> orderItemVOMap = orderItemService.getOrderItemVOMap(buyerId, orderIdList);
-
-		Map<Long, AddressVO> addressVOMap = addressService.getAddressMap(orderIdList);
-
-		orderVOList.stream().forEach(order -> {
-			List<OrderItemVO> orderItemVOList = orderItemVOMap.get(order.getOrderId());
-			order.setOrderItemVOList(orderItemVOList);
-
-			AddressVO addressVO = addressVOMap.get(order.getOrderId());
-			order.setAddressVO(addressVO);
-		});
-
-		return orderVOList;
+	public IPage<OrderVO> getOrderListByMaster(Long buyerId, Long orderId){
+		return this.getOrderList(buyerId, orderId);
 	}
 
-	private List<OrderVO> getOrderVOList(Long buyerId, Long orderId){
+	private IPage<OrderVO> getPageOrderVOList(Long buyerId, Long orderId){
+		IPage<OrderVO> pageResult = new Page<>();
+
 		QueryWrapper<Order> queryWrapper = Wrappers.query();
 		if (buyerId != null) {
 			queryWrapper.eq("buyer_id", buyerId);
@@ -100,11 +91,20 @@ public class OrderService {
 		if (orderId != null) {
 			queryWrapper.eq("order_id", orderId);
 		}
-		List<Order> orderList = orderMapper.selectList(queryWrapper);
-		if (CollectionUtils.isEmpty(orderList)) {
-			return Lists.newArrayList();
+
+		Page<Order> pageParam = new Page<Order>(1, 3);
+		IPage<Order> pageOrders = orderMapper.selectPage(pageParam, queryWrapper);
+		if (pageOrders == null) {
+			return pageResult;
 		}
-		return orderList.stream().map(order -> covertOrderVO(order)).collect(Collectors.toList());
+
+		BeanUtils.copyProperties(pageOrders, pageResult);
+		if (CollectionUtils.isEmpty(pageOrders.getRecords())){
+			return pageResult;
+		}
+		List<OrderVO> dataList = pageOrders.getRecords().stream().map(order -> covertOrderVO(order)).collect(Collectors.toList());
+		pageResult.setRecords(dataList);
+		return pageResult;
 	}
 
 	private OrderVO covertOrderVO(Order order) {
