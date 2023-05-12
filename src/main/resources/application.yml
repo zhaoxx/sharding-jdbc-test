@@ -155,6 +155,13 @@ spring:
           round-robin: # 负载均衡算法
             type: ROUND_ROBIN # 轮询
       sharding:
+        # 分库策略
+        default-database-strategy:
+          # 用于单分片键的标准分片场景
+          standard:
+            sharding-algorithm-name: database-inline
+            # 分片列名
+            sharding-column: buyer_id
         sharding-algorithms:
           database-inline:
             type: INLINE
@@ -168,13 +175,6 @@ spring:
             type: INLINE
             props:
               algorithm-expression: t_order_item_$->{order_id % 2}
-        # 分库策略
-        default-database-strategy:
-          # 用于单分片键的标准分片场景
-          standard:
-            sharding-algorithm-name: database-inline
-            # 分片列名
-            sharding-column: buyer_id
         # 分布式序列策略
         key-generators:
           snowflake:
