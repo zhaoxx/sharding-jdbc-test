@@ -13,8 +13,6 @@ public class OrderItem {
 	private Long orderItemId;
 	
 	private String skuCode;
-
-	private Long buyerId;
 	
 	private Long orderId;
 }

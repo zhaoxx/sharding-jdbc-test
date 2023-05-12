@@ -8,10 +8,10 @@ import com.epec.model.ao.AddOrderAO;
 import com.epec.model.vo.AddressVO;
 import com.google.common.collect.Maps;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +23,7 @@ import java.util.Map;
 @Service
 public class AddressService {
 
-    @Autowired
+    @Resource
     private AddressMapper addressMapper;
 
     public void saveAddress(AddOrderAO addOrderAO, Long orderId){

@@ -9,10 +9,10 @@ import com.epec.model.vo.OrderItemVO;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +24,7 @@ import java.util.Map;
 @Service
 public class OrderItemService {
 
-    @Autowired
+    @Resource
     private OrderItemMapper orderItemMapper;
 
     public void saveOrderItem(AddOrderAO addOrderAO, Long orderId){
@@ -32,7 +32,6 @@ public class OrderItemService {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrderId(orderId);
             orderItem.setSkuCode(skuCode);
-            orderItem.setBuyerId(addOrderAO.getBuyerId());
             orderItemMapper.insert(orderItem);
         });
     }

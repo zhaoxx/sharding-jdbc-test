@@ -1,3 +1,8 @@
+DROP TABLE `t_order_0`;
+DROP TABLE `t_order_1`;
+DROP TABLE `t_order_item_0`;
+DROP TABLE `t_order_item_1`;
+DROP TABLE `t_address`;
 
 CREATE TABLE IF NOT EXISTS `t_order_0` (
 	`order_id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
@@ -18,7 +23,6 @@ CREATE TABLE IF NOT EXISTS `t_order_1` (
 CREATE TABLE IF NOT EXISTS `t_order_item_0`  (
 	`order_item_id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `order_id` bigint NOT NULL DEFAULT '0' COMMENT '订单id',
-	`buyer_id`  bigint NOT NULL DEFAULT '0' COMMENT '购买用户id',
     `sku_code`  varchar(32) NOT NULL DEFAULT '' COMMENT '商品信息',
 	`create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -28,7 +32,6 @@ CREATE TABLE IF NOT EXISTS `t_order_item_0`  (
 CREATE TABLE IF NOT EXISTS `t_order_item_1`  (
 	`order_item_id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `order_id` bigint NOT NULL DEFAULT '0' COMMENT '订单id',
-	`buyer_id`  bigint NOT NULL DEFAULT '0' COMMENT '购买用户id',
     `sku_code`  varchar(32) NOT NULL DEFAULT '' COMMENT '商品信息',
 	`create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
