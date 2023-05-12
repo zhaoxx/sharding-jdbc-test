@@ -17,19 +17,4 @@ public class Order implements Serializable {
 
 	private Long buyerId;
 
-	public Long getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
-	}
-
-	public Long getBuyerId() {
-		return buyerId;
-	}
-
-	public void setBuyerId(Long buyerId) {
-		this.buyerId = buyerId;
-	}
 }

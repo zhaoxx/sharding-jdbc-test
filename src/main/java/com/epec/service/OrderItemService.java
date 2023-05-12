@@ -32,6 +32,7 @@ public class OrderItemService {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrderId(orderId);
             orderItem.setSkuCode(skuCode);
+            orderItem.setBuyerId(addOrderAO.getBuyerId());
             orderItemMapper.insert(orderItem);
         });
     }

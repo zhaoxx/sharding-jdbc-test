@@ -155,9 +155,19 @@ spring:
           round-robin: # 负载均衡算法
             type: ROUND_ROBIN # 轮询
       sharding:
-        binding-tables: # 绑定表
-          - t_order,t_order_item
-        broadcast-tables: t_address #广播规则表
+        sharding-algorithms:
+          database-inline:
+            type: INLINE
+            props:
+              algorithm-expression: ds-$->{buyer_id % 2}
+          t-order-inline:
+            type: INLINE
+            props:
+              algorithm-expression: t_order_$->{order_id % 2}
+          t-order-item-inline:
+            type: INLINE
+            props:
+              algorithm-expression: t_order_item_$->{order_id % 2}
         # 分库策略
         default-database-strategy:
           # 用于单分片键的标准分片场景
@@ -169,19 +179,6 @@ spring:
         key-generators:
           snowflake:
             type: SNOWFLAKE
-        sharding-algorithms:
-          database-inline:
-            props:
-              algorithm-expression: ds-$->{buyer_id % 2}
-            type: INLINE
-          t-order-inline:
-            type: INLINE
-            props:
-              algorithm-expression: t_order_$->{order_id % 2}
-          t-order-item-inline:
-            type: INLINE
-            props:
-              algorithm-expression: t_order_item_$->{order_id % 2}
         tables:
           t_order:
             actual-data-nodes: ds-$->{0..1}.t_order_$->{0..1}
@@ -201,6 +198,10 @@ spring:
             key-generate-strategy:
               column: order_item_id
               key-generator-name: snowflake
+        binding-tables: # 绑定表
+          - t_order,t_order_item
+        broadcast-tables: #广播规则表
+          - t_address
     # 属性配置
     props:
       # 展示修改以后的sql语句
