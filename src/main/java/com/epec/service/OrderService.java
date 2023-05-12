@@ -91,7 +91,9 @@ public class OrderService {
 		if (orderId != null) {
 			queryWrapper.eq("order_id", orderId);
 		}
-
+		// 排序
+		queryWrapper.orderByAsc("order_id");
+		// 分页参数
 		Page<Order> pageParam = new Page<Order>(1, 3);
 		IPage<Order> pageOrders = orderMapper.selectPage(pageParam, queryWrapper);
 		if (pageOrders == null) {
