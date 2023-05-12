@@ -141,7 +141,7 @@ spring:
               # 从库
               read-data-source-names: slave-ds-0
               # 负载均衡算法名称
-              load-balancer-name: round
+              load-balancer-name: round-robin
           ds-1: #主库从库逻辑数据源定义
             type: STATIC #静态类型，（动态Dynamic）
             props:
