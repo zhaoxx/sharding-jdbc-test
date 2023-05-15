@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.epec.model.Order;
+import com.epec.model.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,5 +15,5 @@ public interface OrderMapper extends BaseMapper<Order> {
 	
 	void createOrder(Order order);
 
-	List<Order> getOrderListByParams(@Param("buyerId") Long buyerId, @Param("skuCode") String skuCode);
+	List<OrderVO> getOrderListByParams(@Param("buyerId") Long buyerId, @Param("skuCode") String skuCode);
 }

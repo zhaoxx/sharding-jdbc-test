@@ -15,4 +15,5 @@ public class OrderVO {
     private Long buyerId;
     private List<OrderItemVO> orderItemVOList;
     private AddressVO addressVO;
+    private Integer orderItemCount;
 }
