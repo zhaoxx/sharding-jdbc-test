@@ -201,7 +201,8 @@ spring:
         binding-tables: # 绑定表
           - t_order,t_order_item
         broadcast-tables: #广播规则表
-          - t_address,t_dict
+          - t_address
+          - t_dict
     # 属性配置
     props:
       # 展示修改以后的sql语句

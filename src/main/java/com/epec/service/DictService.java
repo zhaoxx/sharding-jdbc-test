@@ -2,6 +2,7 @@ package com.epec.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.epec.config.ShardingJdbcMaster;
 import com.epec.mapper.DictMapper;
 import com.epec.model.Dict;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ public class DictService {
         return dictMapper.update(null, updateWrapper);
     }
 
+    @ShardingJdbcMaster
     public List<Dict> getDict(String statusCode) {
         LambdaQueryWrapper<Dict> queryWrapper = new LambdaQueryWrapper();
         queryWrapper.eq(Dict::getStatusCode, statusCode);

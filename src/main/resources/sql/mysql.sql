@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS `t_dict`  (
   `enabled` tinyint(1) NOT NULL DEFAULT 1 COMMENT '启用状态，1：启用，0未启用',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`dict_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='字典表';
 
 
