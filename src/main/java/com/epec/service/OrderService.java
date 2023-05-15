@@ -46,6 +46,11 @@ public class OrderService {
 		orderItemService.saveOrderItem(addOrderAO, order.getOrderId());
 	}
 
+	@ShardingJdbcMaster
+	public List<Order> getOrderListByParams(Long buyerId, String skuCode) {
+		return orderMapper.getOrderListByParams(buyerId, skuCode);
+	}
+
 	public IPage<OrderVO> getOrderList(Long buyerId, Long orderId){
 		IPage<OrderVO> orderPage = this.getPageOrderVOList(buyerId, orderId);
 		if (orderPage == null || CollectionUtils.isEmpty(orderPage.getRecords())) {

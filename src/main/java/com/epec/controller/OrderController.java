@@ -31,6 +31,12 @@ public class OrderController {
 		return JSON.toJSONString(orderService.getOrderListByMaster(buyerId, orderId));
 	}
 
+	@GetMapping("getOrderListByParams")
+	public String getOrder(@RequestParam(value = "buyerId", required = false) Long buyerId,
+						   @RequestParam(value = "skuCode", required = false) String skuCode) {
+		return JSON.toJSONString(orderService.getOrderListByParams(buyerId, skuCode));
+	}
+
 	@GetMapping("createOrder")
 	public String createOrderRest(@RequestParam(value = "buyerId") Long buyerId) {
 		AddOrderAO addOrderAO = new AddOrderAO();
