@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @MapperScan("com.epec.mapper")
-public class Application {
+public class ShardingJdbcApplication {
 	
 	public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(ShardingJdbcApplication.class, args);
     }
 
 }
