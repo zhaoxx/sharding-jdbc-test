@@ -18,7 +18,7 @@
 
 	<select id="getOrderListByParams" resultMap="BaseResultMap"
 			parameterType="long">
-		select o.order_id, o.buyer_id
+		select distinct o.order_id, o.buyer_id
 		from t_order o inner join t_order_item oi on o.order_id=oi.order_id
 		where
 			1=1
