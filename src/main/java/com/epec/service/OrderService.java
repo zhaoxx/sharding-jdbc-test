@@ -47,8 +47,8 @@ public class OrderService {
 	}
 
 	@ShardingJdbcMaster
-	public List<OrderVO> getOrderListByParams(Long buyerId, String skuCode) {
-		return orderMapper.getOrderListByParams(buyerId, skuCode);
+	public List<OrderVO> getOrderListByParams(Long buyerId, Long orderId, String skuCode) {
+		return orderMapper.getOrderListByParams(buyerId, orderId, skuCode);
 	}
 
 	public IPage<OrderVO> getOrderList(Long buyerId, Long orderId){

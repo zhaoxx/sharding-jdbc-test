@@ -40,8 +40,24 @@ WHERE order_id IN (1656542944004079617)
 http://localhost:8080/order/getOrder?buyerId=3&orderId=1656542944004079617
 指定数据库节点，指定表查询
 
+4)绑定表
+场景一、无绑定表，执行 http://localhost:8080/order/getOrderListByParams?buyerId=11 查询使用了笛卡尔查询。
+场景二、存在绑定表，执行 http://localhost:8080/order/getOrderListByParams?buyerId=11 ，仅2条sql
+
+5)广播表
+保存数据
+http://localhost:8080/dict/saveDict?statusCode=1001&statusValue=%E5%BE%85%E7%A1%AE%E8%AE%A4
+http://localhost:8080/dict/saveDict?statusCode=1002&statusValue=%E5%BE%85%E6%94%AF%E4%BB%98
+http://localhost:8080/dict/saveDict?statusCode=1003&statusValue=%E5%BE%85%E5%8F%91%E8%B4%A7
+http://localhost:8080/dict/saveDict?statusCode=1004&statusValue=%E5%B7%B2%E5%8F%91%E8%B4%A7
+http://localhost:8080/dict/saveDict?statusCode=1005&statusValue=%E5%B7%B2%E5%AE%8C%E6%88%90
+
+查询数据
+http://localhost:8080/dict/getDict?statusCode=1005
 
 
 读写分离
 1、插入数据
 INSERT INTO `t_order_1` (`order_id`, `buyer_id`, `create_time`, `update_time`) VALUES (1656542774898130945, 1, '2023-05-11 14:12:29', '2023-05-11 14:12:29');
+
+

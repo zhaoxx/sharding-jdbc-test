@@ -27,14 +27,15 @@ public class OrderController {
 
 	@GetMapping("getMasterOrder")
 	public String getMasterOrder(@RequestParam(value = "buyerId", required = false) Long buyerId,
-						   @RequestParam(value = "orderId", required = false) Long orderId) {
+								 @RequestParam(value = "orderId", required = false) Long orderId) {
 		return JSON.toJSONString(orderService.getOrderListByMaster(buyerId, orderId));
 	}
 
 	@GetMapping("getOrderListByParams")
 	public String getOrder(@RequestParam(value = "buyerId", required = false) Long buyerId,
+						   @RequestParam(value = "orderId", required = false) Long orderId,
 						   @RequestParam(value = "skuCode", required = false) String skuCode) {
-		return JSON.toJSONString(orderService.getOrderListByParams(buyerId, skuCode));
+		return JSON.toJSONString(orderService.getOrderListByParams(buyerId, orderId, skuCode));
 	}
 
 	@GetMapping("createOrder")

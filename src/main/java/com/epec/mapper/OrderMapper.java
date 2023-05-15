@@ -15,5 +15,5 @@ public interface OrderMapper extends BaseMapper<Order> {
 	
 	void createOrder(Order order);
 
-	List<OrderVO> getOrderListByParams(@Param("buyerId") Long buyerId, @Param("skuCode") String skuCode);
+	List<OrderVO> getOrderListByParams(@Param("buyerId") Long buyerId, @Param("orderId") Long orderId, @Param("skuCode") String skuCode);
 }
