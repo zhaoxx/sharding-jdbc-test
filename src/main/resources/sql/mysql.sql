@@ -3,6 +3,7 @@ DROP TABLE `t_order_1`;
 DROP TABLE `t_order_item_0`;
 DROP TABLE `t_order_item_1`;
 DROP TABLE `t_address`;
+DROP TABLE `t_dict`;
 
 CREATE TABLE IF NOT EXISTS `t_order_0` (
 	`order_id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
@@ -49,9 +50,19 @@ CREATE TABLE IF NOT EXISTS `t_address` (
   PRIMARY KEY (`address_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='订单地址表';
 
+CREATE TABLE IF NOT EXISTS `t_dict`  (
+  `dict_id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `status_code` varchar(100) NOT NULL DEFAULT '' COMMENT '编码',
+  `status_value` varchar(100) NOT NULL DEFAULT '' COMMENT '值',
+  `enabled` tinyint(1) NOT NULL DEFAULT 1 COMMENT '启用状态，1：启用，0未启用',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='字典表';
+
 
 truncate table t_order_0;
 truncate table t_order_1;
 truncate table t_order_item_0;
 truncate table t_order_item_1;
 truncate table t_address;
+truncate table t_dict;
